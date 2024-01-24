@@ -20,7 +20,7 @@ PYTHONPATH=path/to/eudaq/lib ./PythleyProducer.py --name "vsub" --run-control "t
 Add YAML-style config file:
 
 ```ini
-[Pythley]
+[Producer.Pythley]
 config_file = "myconfigfile_formykeithley.yml"
 ```
 

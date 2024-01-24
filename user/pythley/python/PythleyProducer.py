@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # load binary lib/pyeudaq.so
 import yaml
+import time
 import pyeudaq
 from Keithley import KeithleySMU2400Series
 
@@ -14,7 +15,8 @@ class PythleyProducer(pyeudaq.Producer):
         print ('DoInitialise')
 
         configuration_file = ''
-        with open(self.GetInitItem("config_file"), 'r') as file:
+        conf=self.GetInitConfiguration().as_dict()
+        with open(conf['config_file'], 'r') as file:
             configuration_file = yaml.load(file, Loader=yaml.SafeLoader)
 
         self.keithley = KeithleySMU2400Series(configuration_file)
@@ -23,13 +25,14 @@ class PythleyProducer(pyeudaq.Producer):
     def DoConfigure(self):
         print ('DoConfigure')
         self.keithley.disable_output();
-
+        conf=self.GetInitConfiguration().as_dict()
+        print(conf['v_start'])
         # set V_Start
-        self.keithley.set_voltage(self.GetConfigItem("v_start"), unit='V')
+        self.keithley.set_voltage(float(conf['v_start']), unit='V')
         self.keithley.enable_output()
 
         # ramp to V_Set
-        self.keithley.vramp(self.GetConfigItem("v_set"), self.GetConfigItem("v_step"), 'V')
+        self.keithley.vramp(float(conf['v_set']), float(conf['v_step']), 'V')
 
     def DoStartRun(self):
         print ('DoStartRun')
@@ -39,9 +42,10 @@ class PythleyProducer(pyeudaq.Producer):
     def DoStopRun(self):
         print ('DoStopRun')
         self.is_running = 0
+        conf=self.GetInitConfiguration().as_dict()
 
         # ramp to V_Sart
-        self.keithley.vramp(self.GetConfigItem("v_start"), self.GetConfigItem("v_step"), 'V')
+        self.keithley.vramp(float(conf['v_start']), float(conf['v_step']), 'V')
         # Switch off
         self.keithley.disable_output();
 

@@ -1,11 +1,11 @@
 Device:
     Configuration:
         Device: 2410
-        
+
         #use 'COM<n>' for Windows (n is integer)
         #use '/dev/ttyUSB<n>' for Linux/MAC (n is integer)
         #might need to: 'sudo chmod a+rw /dev/ttyUSB0'
-        Port: '/dev/ttyUSB2' #USER ONCE
+        Port: '/dev/ttyUSB1' #USER ONCE
         Baudrate: 19200
         TimeOut: 2
 
